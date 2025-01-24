@@ -1,42 +1,95 @@
-import React from 'react';
+'use client'
 
+import React, { useState } from 'react';
+import { v4 } from 'uuid';
+
+// const initialBoard: string[][] = [
+//     ['text-blue-800'],
+//     ['text-blue-800'],
+//     ['text-blue-800'],
+//     ['text-blue-800'],
+//     ['text-blue-800'],
+//   ];
+// const initialBoard: string[][] = [
+//     ['text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800'],
+//     ['text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800'],
+//     ['text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800'],
+//     ['text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800'],
+//     ['text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800'],
+//     ['text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800'],
+//     ['text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800'],
+//     ['text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800'],
+//   ];
 const initialBoard: string[][] = [
-    ['text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800'],
-    Array(8).fill('text-blue-800'),
-    Array(8).fill('text-blue-800'),
-    Array(8).fill('text-blue-800'),
-    Array(8).fill('text-blue-800'),
-    Array(8).fill('text-blue-800'),
-    Array(8).fill('text-blue-800'),
-    Array(8).fill('text-blue-800'),
+    ['', 'text-blue-800', 'text-blue-800', 'text-blue-800', '',''],
+    ['', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', ''],
+    ['text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800'],
+    ['', 'text-blue-800', 'text-blue-800', 'text-blue-800', 'text-blue-800', ''],
+    ['', 'text-blue-800', 'text-blue-800', 'text-blue-800', '','']
   ];
 
 const HexagonBoard = () => {
+  const [board, setBoard] = useState(initialBoard)  
   return (
     <>
       <div className="relative w-36 h-36">
-        {/* { initialBoard && initialBoard.map((col: string[],index: number) => {
+        { board && board.map((row: string[],rowIndex: number) => 
+            row.map((cel, cellIndex) => {
+                const cellTop = rowIndex * 54;
+                const cellLeft = rowIndex % 2 === 0 ? cellIndex * 58 : cellIndex*2*29-29
+                if(cel==='') return null
+                return (                    
+                    <div 
+                        key={v4()} 
+                        className={`absolute w-[55.5%] pb-[86%] bg-current text-blue-800 clip-hex`}
+                        style={{ top: `${cellTop}%`, left: `${cellLeft}%` }}
+                    ></div>        
+                )
+            }))}
+            
+        {/* <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[0%] left-[58%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[0%] left-[116%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[0%] left-[174%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[0%] left-[232%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[0%] left-[290%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[0%] left-[348%]"></div>
 
-            return (
-                <div key={`${col}${index}`} className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-0 left-[55.5%]"></div>        
-        )})} */}
-        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[54%] left-[0%]"></div>
-        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[27%] left-[43%]"></div>
-        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[81%] left-[43%]"></div>
-        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-0 left-[86%]"></div>
-        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[54%] left-[86%]"></div>
-        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[108%] left-[86%]"></div>
-        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[27%] left-[129%]"></div>
-        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[81%] left-[129%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[54%] left-[29%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[54%] left-[87%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[54%] left-[145%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[54%] left-[203%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[54%] left-[261%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[54%] left-[319%]"></div>
+
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[108%] left-[0%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[108%] left-[58%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[108%] left-[116%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[108%] left-[174%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[108%] left-[232%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[108%] left-[290%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[108%] left-[348%]"></div>
+
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[162%] left-[29%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[162%] left-[87%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[162%] left-[145%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[162%] left-[203%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[162%] left-[261%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[162%] left-[319%]"></div>
+
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[216%] left-[58%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[216%] left-[116%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[216%] left-[174%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[216%] left-[232%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[216%] left-[290%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[216%] left-[348%]"></div>
+
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[270%] left-[29%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[270%] left-[87%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[270%] left-[145%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[270%] left-[203%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[270%] left-[261%]"></div>
+        <div className="absolute w-[55.5%] pb-[86.6%] bg-current text-blue-800 clip-hex top-[270%] left-[319%]"></div> */}
       </div>
-
-      {/* <svg style={{ visibility: 'hidden', position: 'absolute' }} width="0" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1">
-        <defs>
-          <clipPath id="hexClip" clipPathUnits="objectBoundingBox">
-            <polygon points="0.25 0, 0.75 0, 1 0.5, 0.75 1, 0.25 1, 0 0.5" />
-          </clipPath>
-        </defs>
-      </svg> */}
     </>
   );
 };
