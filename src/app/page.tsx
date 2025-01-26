@@ -1,10 +1,16 @@
+import ChessBoard from "./components/ChessBoard";
 import HexagonBoard from "./components/HexagonBoard/HexagonBoard";
-import "./components/HexagonBoard/HexagonBoard.css";
 
 export default function Home() {
   return (
-    <div className="bg-white p-40">
-      <HexagonBoard />
+    <div className="bg-black flex p-10 w-full h-full">
+      <div className="bg-orange-400 p-20">
+        SideBar
+      </div>
+      <div className="pl-20">
+        <HexagonBoard />
+        {/* <ChessBoard /> */}
+      </div>
     </div>
   );
 }

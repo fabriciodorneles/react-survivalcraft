@@ -14,13 +14,17 @@
   }
 }
 
-body {
+body,
+html {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .clip-hex {
   /* clip-path: polygon(25% 20%, 75% 20%, 100% 50%, 75% 80%, 25% 80%, 0% 50%); */
-  clip-path: polygon(50% 10%, 100% 30%, 100% 70%, 50% 90%, 0% 70%, 0% 30%);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 }
