@@ -36,7 +36,7 @@ const createHexState = (agent: string, feature: string, terrain: string): HexSta
 
 const agentList: agentState[] = [
   { agent: '🕴️', hex: { rowIndex: 1, cellIndex: 1 } },
-  { agent: '🐅', hex: { rowIndex: 2, cellIndex: 6 } },
+  { agent: '🐅', hex: { rowIndex: 12, cellIndex: 8 } },
   { agent: '🦌', hex: { rowIndex: 2, cellIndex: 12 } },
   { agent: '🦌', hex: { rowIndex: 6, cellIndex: 13 } },
 ]
@@ -74,8 +74,18 @@ const featureList: featureState[] = [
   { type: '🪨', hex: { rowIndex: 6, cellIndex: 4 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
   { type: '🪨', hex: { rowIndex: 6, cellIndex: 5 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
   { type: '🪨', hex: { rowIndex: 8, cellIndex: 6 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
-  { type: '🪨', hex: { rowIndex: 12, cellIndex: 7 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🪨', hex: { rowIndex: 8, cellIndex: 7 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🔥', hex: { rowIndex: 12, cellIndex: 7 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
   { type: '🛖', hex: { rowIndex: 12, cellIndex: 8 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },  
+  { type: '🪨', hex: { rowIndex: 11, cellIndex: 8 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },  
+  { type: '🪨', hex: { rowIndex: 11, cellIndex: 9 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },  
+  { type: '🪨', hex: { rowIndex: 11, cellIndex: 10 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },  
+  { type: '🪨', hex: { rowIndex: 13, cellIndex: 8 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },  
+  { type: '🪨', hex: { rowIndex: 13, cellIndex: 9 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },  
+  { type: '🪨', hex: { rowIndex: 13, cellIndex: 10 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },  
+  { type: '🪨', hex: { rowIndex: 12, cellIndex: 10 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },  
+  { type: '💰', hex: { rowIndex: 12, cellIndex: 9 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },  
+  { type: '🧍‍♀️', hex: { rowIndex: 10, cellIndex: 8 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },  
 ]
   
 
@@ -232,8 +242,8 @@ const HexagonBoard = () => {
                       style={{ top: `${cellTop}%`, left: `${cellLeft}%` }}
                       onClick={()=>handleClick(rowIndex, cellIndex)}
                     >
-                      <span className='text-4xl' style={{ position: 'absolute', zIndex: 1 }}>{cell.feature}</span>
-                      <span className='text-4xl' style={{ position: 'relative', zIndex: 2 }}>{cell.agent}</span>
+                      <span className='text-4xl' style={{ position: 'absolute', zIndex: 2 }}>{cell.feature}</span>
+                      <span className='text-4xl' style={{ position: 'relative', zIndex: 1 }}>{cell.agent}</span>
                       {/* {rowIndex}-{cellIndex} */}
                     </div>        
                 )
