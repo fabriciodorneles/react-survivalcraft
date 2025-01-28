@@ -1,47 +1,116 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 
 interface HexState {  
   agent: string;
-  environment: string;
+  feature: string;
   terrain: string;
 }
 
-const createHexState = (agent: string, environment: string, terrain: string): HexState => ({
+interface agentState {
+  agent: string;
+  hex: { rowIndex: number, cellIndex: number }
+}
+interface featureState {
+  type: string;
+  hex: { rowIndex: number, cellIndex: number }
+  baseHealth: number;
+  currentHealth: number;
+  possibleResources: string[];
+  harvestable: boolean;
+}
+interface playerState {
+  hex: { rowIndex: number, cellIndex: number }
+}
+
+type turnState = 'player' | 'machine'
+
+
+const createHexState = (agent: string, feature: string, terrain: string): HexState => ({
   agent,
-  environment,
+  feature,
   terrain,
 });
 
-const generateInitialBoard = (): HexState[][] => {
-  const emptyHex = () => createHexState(' ', '', '');
-  const agentHex = () => createHexState('🕴️', '', '');
-  const environmentHex = () => createHexState('', '🌳', '');
-  const tigerHex = () => createHexState('🐅', '', '');
-  const deerHex = () => createHexState('🦌', '', '');
-  const rockHex = () => createHexState('', '🪨', '');
-  const houseHex = () => createHexState('', '🛖', '');
+const agentList: agentState[] = [
+  { agent: '🕴️', hex: { rowIndex: 1, cellIndex: 1 } },
+  { agent: '🐅', hex: { rowIndex: 2, cellIndex: 6 } },
+  { agent: '🦌', hex: { rowIndex: 2, cellIndex: 12 } },
+  { agent: '🦌', hex: { rowIndex: 6, cellIndex: 13 } },
+]
 
-  return [
+
+const featureList: featureState[] = [
+  { type: '🌳', hex: { rowIndex: 1, cellIndex: 7 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 1, cellIndex: 11 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 2, cellIndex: 1 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 2, cellIndex: 7 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 2, cellIndex: 13 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 3, cellIndex: 2 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 3, cellIndex: 3 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 3, cellIndex: 4 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 3, cellIndex: 5 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 3, cellIndex: 6 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 3, cellIndex: 7 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 3, cellIndex: 8 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 3, cellIndex: 9 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 3, cellIndex: 10 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 3, cellIndex: 11 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 3, cellIndex: 12 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 3, cellIndex: 13 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 4, cellIndex: 2 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 4, cellIndex: 4 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 4, cellIndex: 6 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 4, cellIndex: 8 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 4, cellIndex: 10 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 4, cellIndex: 12 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 5, cellIndex: 3 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 5, cellIndex: 5 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 5, cellIndex: 7 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 5, cellIndex: 9 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🌳', hex: { rowIndex: 5, cellIndex: 11 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🪨', hex: { rowIndex: 6, cellIndex: 4 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🪨', hex: { rowIndex: 6, cellIndex: 5 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🪨', hex: { rowIndex: 8, cellIndex: 6 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🪨', hex: { rowIndex: 12, cellIndex: 7 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },
+  { type: '🛖', hex: { rowIndex: 12, cellIndex: 8 }, baseHealth: 100, currentHealth: 100, possibleResources: ['wood'], harvestable: true },  
+]
+  
+
+const generateInitialBoard = (): HexState[][] => {
+  const emptyHex = () => createHexState('', '', '');
+  const agentHex = () => createHexState('🕴️', '', '');
+
+  const initialBoard = [
     Array(19).fill(null).map(emptyHex),
-    [emptyHex(), agentHex(), environmentHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), environmentHex(), emptyHex(), emptyHex(), emptyHex(), environmentHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex()],
-    [emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), tigerHex(), environmentHex(), emptyHex(), emptyHex(), emptyHex(), environmentHex(), deerHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex()],
-    [emptyHex(), emptyHex(), environmentHex(), environmentHex(), environmentHex(), emptyHex(), emptyHex(), rockHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex()],
-    [emptyHex(), environmentHex(), emptyHex(), environmentHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex()],
-    [emptyHex(), emptyHex(), environmentHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), environmentHex(), emptyHex(), emptyHex(), emptyHex(), environmentHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex()],
-    [emptyHex(), emptyHex(), environmentHex(), houseHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), rockHex(), environmentHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex()],
-    [emptyHex(), emptyHex(), environmentHex(), emptyHex(), emptyHex(), emptyHex(), rockHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex()],
-    [emptyHex(), emptyHex(), environmentHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), deerHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex()],
-    [emptyHex(), emptyHex(), environmentHex(), emptyHex(), emptyHex(), emptyHex(), rockHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex()],
-    [emptyHex(), emptyHex(), environmentHex(), emptyHex(), emptyHex(), emptyHex(), rockHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex()],
+    [emptyHex(), agentHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex(), emptyHex()],
+    Array(19).fill(null).map(emptyHex),
+    Array(19).fill(null).map(emptyHex),
+    Array(19).fill(null).map(emptyHex),
+    Array(19).fill(null).map(emptyHex),
+    Array(19).fill(null).map(emptyHex),
+    Array(19).fill(null).map(emptyHex),
+    Array(19).fill(null).map(emptyHex),
+    Array(19).fill(null).map(emptyHex),
+    Array(19).fill(null).map(emptyHex),
     Array(19).fill(null).map(emptyHex),
     Array(19).fill(null).map(emptyHex),
     Array(19).fill(null).map(emptyHex),
     Array(19).fill(null).map(emptyHex),
     Array(19).fill(null).map(emptyHex),
   ];
+
+  agentList.forEach(agent => {
+    initialBoard[agent.hex.rowIndex][agent.hex.cellIndex].agent = agent.agent
+  })
+
+  featureList.forEach(feature => {
+    initialBoard[feature.hex.rowIndex][feature.hex.cellIndex].feature = feature.type
+  })
+
+  return initialBoard;
 };
 
 const initialBoard = generateInitialBoard();
@@ -49,19 +118,63 @@ const initialBoard = generateInitialBoard();
 const HexagonBoard = () => {
   const [board, setBoard] = useState<HexState[][]>(initialBoard);
   const [selectedHexagon, setSelectedHexagon] = useState<{ rowIndex: number, cellIndex: number } | null>(null)
+  const [playerState, setPlayerState] = useState<playerState>({ hex: { rowIndex: 1, cellIndex: 1 } })
+  const [turn, setTurn] = useState<turnState>('player');
+
+  useEffect(() => {
+    if(turn === 'machine') {
+      agentList.forEach(agent => moveNPC(agent))
+      setTurn('player')
+    }
+    if(turn === 'player') {
+      setSelectedHexagon(playerState.hex)
+    }
+  }, [turn])
+
+  const moveNPC = (agent: agentState) => {
+    const newBoard = board.map(row => [...row])    
+    const boardWidth = 19; 
+    const boardHeight = 15; 
+
+    if(!agent) return
+    const { rowIndex, cellIndex } = agent.hex
+    const possibleMoves = [
+      { rowIndex: rowIndex, cellIndex: cellIndex + 1 },
+      { rowIndex: rowIndex, cellIndex: cellIndex - 1 },
+      { rowIndex: rowIndex + 1, cellIndex: cellIndex + 1 },
+      { rowIndex: rowIndex + 1, cellIndex: cellIndex },
+      { rowIndex: rowIndex - 1, cellIndex: cellIndex },
+      { rowIndex: rowIndex - 1, cellIndex: cellIndex - 1 },
+      { rowIndex: rowIndex, cellIndex: cellIndex },
+      { rowIndex: rowIndex, cellIndex: cellIndex },
+      { rowIndex: rowIndex, cellIndex: cellIndex },
+    ].filter(move => 
+      move.rowIndex >= 0 && move.rowIndex < boardHeight &&
+      move.cellIndex >= 0 && move.cellIndex < boardWidth
+    );
+    const move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)]
+    if(rowIndex === move.rowIndex && cellIndex === move.cellIndex) return
+    console.log('->', newBoard[move.rowIndex][move.cellIndex].agent)
+    if(newBoard[move.rowIndex][move.cellIndex].agent !== '') return
+    console.log(newBoard[rowIndex][cellIndex].agent, move.rowIndex, move.cellIndex, rowIndex, cellIndex)
+    newBoard[move.rowIndex][move.cellIndex].agent = newBoard[rowIndex][cellIndex].agent
+    newBoard[rowIndex][cellIndex].agent = ''
+    agent.hex = move
+    setBoard(newBoard)
+  }
 
   const handleClick = (rowIndex: number, cellIndex: number) => {
-    if(!selectedHexagon){
-      setSelectedHexagon({rowIndex, cellIndex})
-    }
+    // if(!selectedHexagon){
+    //   setSelectedHexagon({rowIndex, cellIndex})
+    // }
 
     if(selectedHexagon && isInMoveRange(rowIndex, cellIndex)) {
-      moveCreature(rowIndex, cellIndex)
+      movePlayer(rowIndex, cellIndex)
     }
 
-    if(selectedHexagon && !isInMoveRange(rowIndex, cellIndex)) {
-      setSelectedHexagon(null)
-    }
+    // if(selectedHexagon && !isInMoveRange(rowIndex, cellIndex)) {
+    //   setSelectedHexagon(null)
+    // }
       
   }
 
@@ -77,14 +190,16 @@ const HexagonBoard = () => {
     return sides || upDown
   }
 
-  const moveCreature = (rowIndex: number, cellIndex: number) => {
+  const movePlayer = (rowIndex: number, cellIndex: number) => {
     const newBoard = board.map(row => [...row])
     if (!selectedHexagon) return;
     const { rowIndex: selectedRowIndex, cellIndex: selectedCellIndex } = selectedHexagon
     newBoard[rowIndex][cellIndex].agent = board[selectedRowIndex][selectedCellIndex].agent
-    newBoard[selectedRowIndex][selectedCellIndex].agent = ' '
+    newBoard[selectedRowIndex][selectedCellIndex].agent = ''
     setBoard(newBoard)
     setSelectedHexagon(null)
+    setPlayerState({ hex: { rowIndex, cellIndex } })
+    setTurn('machine')
   } 
 
   return (
@@ -117,7 +232,7 @@ const HexagonBoard = () => {
                       style={{ top: `${cellTop}%`, left: `${cellLeft}%` }}
                       onClick={()=>handleClick(rowIndex, cellIndex)}
                     >
-                      <span className='text-4xl' style={{ position: 'absolute', zIndex: 1 }}>{cell.environment}</span>
+                      <span className='text-4xl' style={{ position: 'absolute', zIndex: 1 }}>{cell.feature}</span>
                       <span className='text-4xl' style={{ position: 'relative', zIndex: 2 }}>{cell.agent}</span>
                       {/* {rowIndex}-{cellIndex} */}
                     </div>        
